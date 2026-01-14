@@ -8,14 +8,12 @@ from sklearn.preprocessing import StandardScaler
 
 
 def initialize_parameters():
-    """Инициализация параметров"""
     np.random.seed(42)
     feature_names = ['Feature1', 'Feature2', 'Feature3']
     return feature_names, None, None, None
 
 
 def generate_data(n_samples=200):
-    """Генерация синтетических данных"""
     X = np.random.randn(n_samples, 3)
     y = 2.5 * X[:, 0] + 1.5 * X[:, 1] - 0.8 * X[:, 2] + np.random.randn(n_samples) * 0.5
 
@@ -30,24 +28,19 @@ def generate_data(n_samples=200):
 
 
 def train_model():
-    """Обучение модели"""
     X, y, feature_names, df = generate_data()
 
-    # Разделение данных
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42
     )
 
-    # Масштабирование
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
 
-    # Обучение модели
     model = LinearRegression()
     model.fit(X_train_scaled, y_train)
 
-    # Прогнозирование и оценка
     y_pred = model.predict(X_test_scaled)
 
     mse = mean_squared_error(y_test, y_pred)
@@ -62,8 +55,7 @@ def train_model():
 
 
 def get_user_input(feature_names):
-    """Получение ввода от пользователя"""
-    print("\nВВОД ДАННЫХ ДЛЯ ПРОГНОЗА")
+    print("\nВвод данных для прогноза")
 
     while True:
         try:
@@ -81,7 +73,6 @@ def get_user_input(feature_names):
 
 
 def predict_from_input(model, scaler, user_data, feature_names):
-    """Прогнозирование на основе пользовательского ввода"""
     if model is None:
         print("Сначала обучите модель!")
         return None
@@ -90,14 +81,13 @@ def predict_from_input(model, scaler, user_data, feature_names):
         user_data_scaled = scaler.transform(user_data)
         prediction = model.predict(user_data_scaled)
 
-        print("\nРЕЗУЛЬТАТЫ ПРОГНОЗА")
+        print("\nРезультаты прогноза")
         print(f"\nВведенные данные:")
         for feature, value in zip(feature_names, user_data[0]):
             print(f"{feature}: {value:.4f}")
 
         print(f"\nПрогнозируемое значение: {prediction[0]:.4f}")
 
-        # Доверительный интервал
         confidence_interval = 1.96 * 0.5
         lower_bound = prediction[0] - confidence_interval
         upper_bound = prediction[0] + confidence_interval
@@ -112,8 +102,7 @@ def predict_from_input(model, scaler, user_data, feature_names):
 
 
 def show_model_stats(model, X_test, y_test, y_pred, feature_names):
-    """Показать статистику модели"""
-    print("\nСТАТИСТИКА МОДЕЛИ")
+    print("\nСтатистика модели")
 
     mse = mean_squared_error(y_test, y_pred)
     rmse = np.sqrt(mse)
@@ -129,14 +118,13 @@ def show_model_stats(model, X_test, y_test, y_pred, feature_names):
 
 
 def visualize_results(model, X_test, y_test, y_pred, feature_names):
-    """Визуализация результатов"""
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
     axes[0].scatter(y_test, y_pred, alpha=0.6)
     axes[0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
     axes[0].set_xlabel('Фактические значения')
     axes[0].set_ylabel('Предсказанные значения')
-    axes[0].set_title('Фактические vs Предсказанные значения')
+    axes[0].set_title('Фактические vs предсказанные значения')
 
     axes[1].bar(feature_names, model.coef_)
     axes[1].set_xlabel('Признаки')
@@ -149,7 +137,6 @@ def visualize_results(model, X_test, y_test, y_pred, feature_names):
 
 
 def test_with_examples(model, scaler, feature_names):
-    """Тестирование на примерных данных"""
     examples = [
         [1.0, 0.5, -0.3],
         [-0.5, 1.2, 0.8],
@@ -157,7 +144,7 @@ def test_with_examples(model, scaler, feature_names):
         [2.0, -1.0, 0.5]
     ]
 
-    print("\nТЕСТИРОВАНИЕ НА ПРИМЕРНЫХ ДАННЫХ")
+    print("\nТестирование на примерных данных")
 
     for i, example in enumerate(examples, 1):
         print(f"\nПример {i}: {example}")
@@ -166,14 +153,13 @@ def test_with_examples(model, scaler, feature_names):
 
 
 def interactive_loop():
-    """Основной интерактивный цикл"""
-    print("ИНТЕРАКТИВНАЯ ЛИНЕЙНАЯ РЕГРЕССИЯ")
+    print("Интерактивная линейная регрессия")
 
     feature_names, model, scaler, df = initialize_parameters()
     model, scaler, X_test, y_test, y_pred, feature_names = train_model()
 
     while True:
-        print("\nМЕНЮ:")
+        print("\nМеню:")
         print("1. Сделать прогноз")
         print("2. Показать статистику модели")
         print("3. Визуализировать результаты")
@@ -213,7 +199,6 @@ def interactive_loop():
 
 
 def main():
-    """Основная функция для запуска программы"""
     interactive_loop()
 
 
